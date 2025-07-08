@@ -15,12 +15,15 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors({origin: "https://hilarious-douhua-57ddd0.netlify.app/",credentials: true}));
+app.use(cors({origin: "https://hilarious-douhua-57ddd0.netlify.app",credentials: true}));
 app.use(express.json());
 app.use(session({
   secret: process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
