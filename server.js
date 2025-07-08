@@ -8,7 +8,7 @@ const productRoutes = require("./routes/product.route");
 const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
 const session = require("express-session");
-
+const MongoStore = require('connect-mongo');
 const passport = require("passport");
 require("./config/passport"); // Add this line
 dotenv.config();
@@ -23,6 +23,7 @@ app.use(session({
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions'
     })
 }));
 app.use(passport.initialize());
