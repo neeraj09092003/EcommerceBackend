@@ -8,7 +8,6 @@ const productRoutes = require("./routes/product.route");
 const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
 const session = require("express-session");
-const path = require("path"); // ✅ REQUIRED for serving React build
 
 const passport = require("passport");
 require("./config/passport"); // Add this line
@@ -35,16 +34,6 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", require("./routes/admin.routes"));
 
-
-//// ✅ Serve frontend (React build)
-
-app.use(express.static(path.join(__dirname, "build"))); // <-- important
-
-
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
