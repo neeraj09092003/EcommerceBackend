@@ -16,7 +16,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors({origin: "https://ecommercewebsitefrontend.netlify.app",credentials: true}));
+app.use(cors({origin: "https://hilarious-douhua-57ddd0.netlify.app/",credentials: true}));
 app.use(express.json());
 app.use(session({
   secret: process.env.JWT_SECRET,

@@ -32,7 +32,7 @@ router.get(
   (req, res) => {
     // Success: redirect to frontend with JWT
     const token = req.user.token;
-    res.redirect(`https://ecommercewebsitefrontend.netlify.app/login?token=${token}`);
+    res.redirect(`https://hilarious-douhua-57ddd0.netlify.app//login?token=${token}`);
   }
 );
 
