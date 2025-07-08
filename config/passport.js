@@ -2,7 +2,9 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/users");
 const jwt = require("jsonwebtoken");
+
 console.log("Google ClientID:", process.env.GOOGLE_CLIENT_ID);
+
 /**
  * Google OAuth Strategy Configuration
  */
@@ -20,11 +22,15 @@ passport.use(
 
         // If not found, create a new user
         if (!user) {
-          user = await User.create({
-            name: profile.displayName,
-            email: profile.emails[0].value,
-            password: "google-oauth", // placeholder (not used for login)
-          });
+          try {
+            user = await User.create({
+              name: profile.displayName,
+              email: profile.emails[0].value,
+              password: "google-oauth", // placeholder (not used for login)
+            });
+          } catch (createError) {
+            return done(createError, null); // Handle user creation error
+          }
         }
 
         // Generate JWT token for the user
@@ -43,12 +49,19 @@ passport.use(
   )
 );
 
-// These are required for Passport, even if not using sessions
-passport.serializeUser((obj, done) => {
-  done(null, obj);
+// Serialize only user ID
+passport.serializeUser ((user, done) => {
+  done(null, user.id); // Store only the user ID
 });
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
+
+// Deserialize user
+passport.deserializeUser (async (id, done) => {
+  try {
+    const user = await User.findById(id).select("-password"); // Exclude password
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
 });
 
 module.exports = passport;
